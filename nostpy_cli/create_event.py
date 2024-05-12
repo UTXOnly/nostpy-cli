@@ -1,6 +1,5 @@
 import asyncio
 import hashlib
-import typing
 import json
 import secp256k1
 import time
@@ -8,8 +7,8 @@ import websockets
 
 
 class Event:
-    def __init__(self, relays_kind4) -> None:
-        self.relays_kind4 = relays_kind4  # List of relay URLs
+    def __init__(self, relays) -> None:
+        self.relays = relays 
 
     def print_color(self, text, color):
         print(f"\033[1;{color}m{text}\033[0m")
@@ -81,20 +80,26 @@ class Event:
         except Exception as exc:
             print(f"Error in sending event: {exc}")
 
-    async def query_relays(self, query_dict):
-        for relay in self.relays_kind4:
+    async def query_relays(self, query_dict, timeout=5):
+        for relay in self.relays:
             try:
                 async with websockets.connect(relay) as ws:
                     query_ws = json.dumps(("REQ", "5326483051590112", query_dict))
                     await ws.send(query_ws)
                     print(f"Query sent to relay {relay}: {query_ws}")
-                    try:
-                        response = json.loads(await asyncio.wait_for(ws.recv(), timeout=3))
-                        print(f"Response from query is: {response}")
-                        return response
-                    except asyncio.TimeoutError:
-                        self.print_color("No response within 1 second, continuing...", "31")
-                        return
+                    
+                    responses_received = 0
+                    start_time = time.time()
+                    response_limit = query_dict.get("limit", 3)
+
+                    while responses_received < response_limit and (time.time() - start_time) < timeout:
+                        try:
+                            response = await asyncio.wait_for(ws.recv(), timeout=1)
+                            self.print_color(f"Response from {relay}: {response}", "32")
+                            responses_received += 1
+                        except asyncio.TimeoutError:
+                            self.print_color("No response within 1 second, continuing...", "31")
+                            break
             except Exception as exc:
                 self.print_color(f"Exception is {exc}, error querying {relay}", "31")
 
