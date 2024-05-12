@@ -4,8 +4,9 @@
 
 ## Features
 
-- Send events to a specified relay.
-- Query events from a relay.
+- Send events to a specified relays
+- Query events from relays
+- Encode/decode kind4 messages
 
 ## Prerequisites
 
@@ -15,6 +16,13 @@ Before installing `nostpy-cli`, ensure you have Python 3.6 or higher installed o
 python3 --version
 ```
 ## Installation
+
+### Install Using pip
+To install using `pip` use the command below:
+```
+pip install nostpy-cli
+```
+
 ### Build from source
 Clone the Repository
 First, clone the repository to your local machine:
@@ -26,11 +34,7 @@ python3 -m build
 pip install .
 ```
 
-### Install Using pip
-To install using `pip` use the command below:
-```
-pip install nostpy-cli
-```
+
 
 ## Usage
 Once installed, you can run nostpy-cli from the command line. Below are some examples of how to use the CLI tool:
