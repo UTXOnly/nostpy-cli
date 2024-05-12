@@ -41,7 +41,7 @@ pip install .
 Once installed, you can run `nostpy-cli` from the command line as shown below:
 
 ### Send Event
-To send an event, you would use a command similar to the following:
+To send an event:
 
 ```
 nostpy-cli send_event -pubkey "your_public_key_hex" -privkey "your_private_key_hex" -content "your plaintext message" -tags "[['tag1', 'value1']]" -kind 4 --relay "wss://yourrelayurl.com" "wss://yoursecondrelayurl.com"
@@ -62,7 +62,7 @@ nostpy-cli send_event -pubkey 5ce5b352f1ef76b1dffc5694dd5b34126137184cc9a7d78cba
 ```
 
 ### Query Event
-To query events, use the following command:
+To query events:
 
 ```
 nostpy-cli query --kinds "[1,9735]" --relay "wss://yourrelayurl.com"
@@ -80,7 +80,7 @@ Decrypt kind4 message content by providing recipient private key hex, sender pub
 
 #### Example 
 ```
-nostpy-cli decode -content "kP9dCG/stpEGNTjW2/aySQ==?iv=+GCHVOBAiM9X074n1vxiFg==" -priv_key 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -sender_pubkey 4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc 
+nostpy-cli decrypt -content "kP9dCG/stpEGNTjW2/aySQ==?iv=+GCHVOBAiM9X074n1vxiFg==" -priv_key 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -sender_pubkey 4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc 
 ```
 ### Help
 To view all available commands and their options, use the help command:
