@@ -35,18 +35,13 @@ pip install nostpy-cli
 ## Usage
 Once installed, you can run nostpy-cli from the command line. Below are some examples of how to use the CLI tool:
 
-### Help
-To view all available commands and their options, use the help command:
-
-```
-nostpy-cli -h
-```
 ### Send Event
 To send an event, you would use a command similar to the following:
 
 ```
-nostpy-cli send_event --pubkey "your_public_key" --privkey "your_private_key" --content "your_encrypted_content" --tags "[['tag1', 'value1']]" --kind 4 --relay "wss://yourrelayurl.com"
+nostpy-cli send_event --pubkey "your_public_key" --privkey "your_private_key" --content "your plaintext message" --tags "[['tag1', 'value1']]" --kind 4 --relay "wss://yourrelayurl.com"
 ```
+`--pubkey` , `--priv_key` and `--relay` arguments are required, all else are optional
 
 ### Query Event
 To query events, use the following command:
@@ -54,7 +49,13 @@ To query events, use the following command:
 ```
 nostpy-cli query --kinds "[1,9075]" --relay "wss://yourrelayurl.com"
 ```
+`--relay` field required
+### Help
+To view all available commands and their options, use the help command:
 
+```
+nostpy-cli -h
+```
 ## Contributing
 Contributions to nostpy-cli are welcome! Please feel free to submit pull requests or open issues to report bugs or suggest enhancements.
 
