@@ -5,10 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nostpy-cli"
 
-version = "0.2.0"
+version = "0.2.2"
 
 authors = [{ name = "Brian Hartford", email = "bh419@protonmail.com" }]
-description = "CLI tool for handling nostpy events"
+description = "CLI tool for handling nostr events"
 readme = "README.md"
 license = { text = "MIT" }
 urls = { homepage = "https://github.com/UTXOnly/nostpy-cli" }
