@@ -32,6 +32,11 @@ async def handle_send_event(args):
         args.public_key, args.private_key, args.content, args.kind, args.tags
     )
 
+async def decrypt_message(args):
+    kind4_codec = Kind4MessageCodec(args.priv_key, args.sender_pubkey)
+    decrypted = kind4_codec.decrypt_message(args.content)
+    print(f"Decrypted message is {decrypted}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Send and query nostr events")
@@ -92,9 +97,22 @@ def main():
     )
     send_event_parser.set_defaults(func=handle_send_event)
 
+    decrypt_parser = subparsers.add_parser("decrypt", help="Decrypt kind4 content")
+    decrypt_parser.add_argument(
+        "-content", "--content", required=True, help="Content to decrypt"
+    )
+    decrypt_parser.add_argument(
+        "-priv_key", "--priv_key", required=True, help="Recipient private key hex"
+    )
+    decrypt_parser.add_argument(
+        "-sender_pubkey", "--sender_pubkey", required=True, help="Sender's pubkey hex"
+    )
+    decrypt_parser.set_defaults(func=decrypt_message)
+
     parser.epilog = 'Example send usage: nostpy-cli send_event -pubkey "abc123..." -privkey "def456..." -content "Hello, world!" --relay "wss://example.com"'
 
     args = parser.parse_args()
+    
     if hasattr(args, "func"):
         asyncio.run(args.func(args))
     else:

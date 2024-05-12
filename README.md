@@ -4,8 +4,8 @@
 
 ## Features
 
-- Send events to a specified relays
-- Query events from relays
+- Send events to specified relays
+- Query events from specified relays
 - Encode/decode kind4 messages
 - Supports [NIP-50](https://github.com/nostr-protocol/nips/blob/master/50.md) searches
 
@@ -74,11 +74,39 @@ nostpy-cli query --kinds "[1,9735]" --relay "wss://yourrelayurl.com"
 ```
 nostpy-cli query -kinds "[31990,1]" -search "random_search" -since 1713629501 -authors npub1g5pm4gf8hh7skp2rsnw9h2pvkr32sdnuhkcx9yte7qxmrg6v4txqqudjqv --relay wss://relay.nostpy.lol
 ```
+
+### Decrypt kind4 message content
+Decrypt kind4 message content by providing recipient private key hex, sender public key hex and the message ciphertext, returns the plaintext message
+
+#### Example 
+```
+nostpy-cli decode -content "kP9dCG/stpEGNTjW2/aySQ==?iv=+GCHVOBAiM9X074n1vxiFg==" -priv_key 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -sender_pubkey 4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc 
+```
 ### Help
 To view all available commands and their options, use the help command:
 
 ```
 nostpy-cli -h
+```
+
+```
+usage: nostpy-cli [-h] {query,send_event,decode} ...
+
+Send and query nostr events
+
+options:
+  -h, --help            show this help message and exit
+
+commands:
+  valid commands
+
+  {query,send_event,decode}
+                        additional help
+    query               Query events
+    send_event          Send an event
+    decode              Decode kind4 content
+
+Example send usage: nostpy-cli send_event -pubkey "abc123..." -privkey "def456..." -content "Hello, world!" --relay "wss://example.com"
 ```
 ## Contributing
 Contributions to nostpy-cli are welcome! Please feel free to submit pull requests or open issues to report bugs or suggest enhancements.
