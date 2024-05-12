@@ -1,11 +1,11 @@
 import asyncio
-import argparse
 import hashlib
+import typing
 import json
 import secp256k1
 import time
 import websockets
-import ast
+
 
 class Event:
     def __init__(self, relays_kind4) -> None:
@@ -26,16 +26,18 @@ class Event:
         data_str = json.dumps(data, separators=(",", ":"), ensure_ascii=False)
         return hashlib.sha256(data_str.encode("UTF-8")).hexdigest()
 
-    def create_event(self, public_key, private_key_hex, content, kind, tags):
-        #tags = []#[["p", public_key]]
-        #tags = json.loads(tags) if isinstance(tags, str) else tags
-        #tags = tags or []
+    def create_event(self, public_key: str, private_key_hex: str, content: str, kind: int, tags: list):
         created_at = int(time.time())
         kind
         event_id = self.calc_event_id(
             public_key, created_at, kind, tags, content
         )
         signature_hex = self.sign_event_id(event_id, private_key_hex)
+        try:
+            self.verify_signature(event_id, public_key, signature_hex)
+        except Exception as exc:
+            print(f"Error verifying sig: {exc}")
+            return
         event_data = {
             "id": event_id,
             "pubkey": public_key,
@@ -45,37 +47,56 @@ class Event:
             "content": content,
             "sig": signature_hex,
         }
-        #print(f"Event created is {event_data}")
         return event_data
+    
+    def verify_signature(self, event_id: str, pubkey: str, sig: str) -> bool:
+        try:
+            pub_key = secp256k1.PublicKey(bytes.fromhex("02" + pubkey), True)
+            result = pub_key.schnorr_verify(
+                bytes.fromhex(event_id), bytes.fromhex(sig), None, raw=True
+            )
+            if result:
+                self.print_color(f"Verification successful for event: {event_id}", "32")
+                return True
+            else:
+                self.print_color(f"Verification failed for event: {event_id}", "31")
+                return False
+        except (ValueError, TypeError) as e:
+            print(f"Error verifying signature for event {event_id}: {e}")
+            return False
 
     async def send_event(self, public_key, private_key_hex, content, kind, tags):
         try:
             event_data = self.create_event(public_key, private_key_hex, content, kind, tags)
             for ws_relay in self.relays_kind4:
                 async with websockets.connect(ws_relay) as ws:
-                    event_json = json.dumps(("EVENT", event_data))
-                    print(f"Event to send is {event_json}")
-                    await ws.send(event_json)
+                    event_json = ("EVENT", event_data)
+                    print("Sending event:")
+                    self.print_color(f"{event_json}", "32")
+                    print(f"to {ws_relay}")
+                    await ws.send(json.dumps(event_json))
                     response = await asyncio.wait_for(ws.recv(), timeout=10)
-                    print("Response:", response)
+                    print(f"Response from {ws_relay} is : ")                        
+                    self.print_color(f"{response}", "33")
         except Exception as exc:
             print(f"Error in sending event: {exc}")
 
-def main():
-    parser = argparse.ArgumentParser(description="Send events via WebSocket.")
-    parser.add_argument("-pubkey", "--public_key", required=True, help="Public key in hexadecimal")
-    parser.add_argument("-privkey", "--private_key", required=True, help="Private key in hexadecimal")
-    parser.add_argument("-content", "--content", required=True, help="Encrypted content to send as event")
-    parser.add_argument("-tags", "--tags", default='[]', type=ast.literal_eval, help="Tags to add to event in JSON format e.g. '[]' for no tags or '[['tag1', 'value1'], ['tag2', 'value2']]'")
-    parser.add_argument("-kind", "--kind", required=True, type=int, help="Event kind")
-    parser.add_argument("--relay", nargs="+", required=True, help="WebSocket relay URLs")
+    async def query_relays(self, query_dict):
+        for relay in self.relays_kind4:
+            try:
+                async with websockets.connect(relay) as ws:
+                    query_ws = json.dumps(("REQ", "5326483051590112", query_dict))
+                    await ws.send(query_ws)
+                    print(f"Query sent to relay {relay}: {query_ws}")
+                    try:
+                        response = json.loads(await asyncio.wait_for(ws.recv(), timeout=3))
+                        print(f"Response from query is: {response}")
+                        return response
+                    except asyncio.TimeoutError:
+                        self.print_color("No response within 1 second, continuing...", "31")
+                        return
+            except Exception as exc:
+                self.print_color(f"Exception is {exc}, error querying {relay}", "31")
 
-    args = parser.parse_args()
-
-    event = Event(relays_kind4=args.relay)
-    asyncio.run(event.send_event(args.public_key, args.private_key, args.content, args.kind, args.tags))
-
-if __name__ == "__main__":
-    main()
 
 
