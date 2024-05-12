@@ -106,7 +106,7 @@ class Event:
             event_data = self.create_event(
                 public_key, private_key_hex, content, kind, tags
             )
-            for ws_relay in self.relays_kind4:
+            for ws_relay in self.relays:
                 async with websockets.connect(ws_relay) as ws:
                     event_json = ("EVENT", event_data)
                     print("Sending event:")

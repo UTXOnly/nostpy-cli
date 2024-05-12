@@ -34,7 +34,7 @@ async def handle_send_event(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Send events via WebSocket.")
+    parser = argparse.ArgumentParser(description="Send and query nostr events")
     subparsers = parser.add_subparsers(
         title="commands", description="valid commands", help="additional help"
     )
@@ -55,7 +55,7 @@ def main():
         "-until", "--until", type=int, help="Collect events until"
     )
     query_parser.add_argument(
-        "-authors", "--authors", type=ast.literal_eval, help="List of authors e.g. []"
+        "-authors", "--authors", type=str, help="List of authors e.g. []"
     )
     query_parser.add_argument(
         "-limit",
@@ -91,6 +91,8 @@ def main():
         "--relay", nargs="+", required=True, help="WebSocket relay URLs"
     )
     send_event_parser.set_defaults(func=handle_send_event)
+
+    parser.epilog = 'Example send usage: nostpy-cli send_event -pubkey "abc123..." -privkey "def456..." -content "Hello, world!" --relay "wss://example.com"'
 
     args = parser.parse_args()
     if hasattr(args, "func"):
