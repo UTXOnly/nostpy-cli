@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=40.6.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nostpy-cli"
+version = "0.1.0"
+authors = [{ name = "Brian Hartford", email = "bh419@protonmail.com" }]
+description = "CLI tool for handling nostpy events"
+readme = "README.md"
+license = { text = "MIT" }
+urls = { homepage = "https://github.com/UTXOnly/nostpy-cli" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = [
+    "argparse",
+    "asyncio",
+    "secp256k1",
+    "websockets"
+]
+
+
+[project.scripts]
+nostpy-cli = "nostpy_cli.main:main"
