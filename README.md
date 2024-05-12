@@ -1,12 +1,13 @@
 # nostpy-cli
 
-`nostpy-cli` is a Command Line Interface (CLI) tool designed to handle nostpy events efficiently. This tool provides easy-to-use commands to send and query events via a WebSocket connection.
+`nostpy-cli` is a Command Line Interface tool for sending and querying nostr events by websocket connection.
 
 ## Features
 
 - Send events to a specified relays
 - Query events from relays
 - Encode/decode kind4 messages
+- Supports [NIP-50](https://github.com/nostr-protocol/nips/blob/master/50.md) searches
 
 ## Prerequisites
 
