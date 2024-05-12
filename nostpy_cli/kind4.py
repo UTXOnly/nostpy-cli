@@ -73,4 +73,3 @@ class Kind4MessageCodec:
         unpadder = padding.PKCS7(algorithms.AES.block_size).unpadder()
         plaintext = unpadder.update(padded_plaintext) + unpadder.finalize()
         return plaintext.decode("utf-8")
-
