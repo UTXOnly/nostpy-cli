@@ -29,7 +29,7 @@ async def handle_send_event(args):
         kind4_codec = Kind4MessageCodec(args.private_key, args.tags[0][1])
         args.content = kind4_codec.encrypt_message(args.content)
     await event.send_event(
-        args.public_key, args.private_key, args.content, args.kind, args.tags
+        args.private_key, args.content, args.kind, args.tags
     )
 
 async def decrypt_message(args):
@@ -75,9 +75,6 @@ def main():
 
     # Subparser for the "send_event" command
     send_event_parser = subparsers.add_parser("send_event", help="Send an event")
-    send_event_parser.add_argument(
-        "-pubkey", "--public_key", required=True, help="Public key in hexadecimal"
-    )
     send_event_parser.add_argument(
         "-privkey", "--private_key", required=True, help="Private key in hexadecimal"
     )

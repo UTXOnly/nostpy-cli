@@ -44,9 +44,9 @@ Once installed, you can run `nostpy-cli` from the command line as shown below:
 To send an event:
 
 ```
-nostpy-cli send_event -pubkey "your_public_key_hex" -privkey "your_private_key_hex" -content "your plaintext message" -tags "[['tag1', 'value1']]" -kind 4 --relay "wss://yourrelayurl.com" "wss://yoursecondrelayurl.com"
+nostpy-cli send_event -privkey "your_private_key_hex" -content "your plaintext message" -tags "[['tag1', 'value1']]" -kind 4 --relay "wss://yourrelayurl.com" "wss://yoursecondrelayurl.com"
 ```
-`--pubkey` , `--priv_key` and `--relay` arguments are required, all else are optional
+`--priv_key` and `--relay` arguments are required, all else are optional
 
 #### Example
 * Send a kind 1 event with tags
@@ -58,7 +58,7 @@ nostpy-cli send_event -pubkey 5ce5b352f1ef76b1dffc5694dd5b34126137184cc9a7d78cba
 
 * Send a kind 4 direct message
 ```
-nostpy-cli send_event -pubkey 5ce5b352f1ef76b1dffc5694dd5b34126137184cc9a7d78cba841c0635e17952 -privkey 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -content "This is my plaintext message" -tags "[['p', '4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc']]" -kind 4 --relay wss://relay.nostpy.lol wss://relay.damus.io wss://nos.lol
+nostpy-cli send_event -privkey 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -content "This is my plaintext message" -tags "[['p', '4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc']]" -kind 4 --relay wss://relay.nostpy.lol wss://relay.damus.io wss://nos.lol
 ```
 
 ### Query Event
