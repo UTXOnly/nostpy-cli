@@ -63,20 +63,21 @@ class Event:
         return hashlib.sha256(data_str.encode("UTF-8")).hexdigest()
 
     def create_event(
-        self, public_key: str, private_key_hex: str, content: str, kind: int, tags: list
+        self, private_key_hex: str, content: str, kind: int, tags: list
     ):
         created_at = int(time.time())
-        kind
-        event_id = self.calc_event_id(public_key, created_at, kind, tags, content)
+        private_key = secp256k1.PrivateKey(bytes.fromhex(private_key_hex))
+        public_key_hex = private_key.pubkey.serialize()[1:].hex()
+        event_id = self.calc_event_id(public_key_hex, created_at, kind, tags, content)
         signature_hex = self.sign_event_id(event_id, private_key_hex)
         try:
-            self.verify_signature(event_id, public_key, signature_hex)
+            self.verify_signature(event_id, public_key_hex, signature_hex)
         except Exception as exc:
             print(f"Error verifying sig: {exc}")
             return
         event_data = {
             "id": event_id,
-            "pubkey": public_key,
+            "pubkey": public_key_hex,
             "kind": kind,
             "created_at": created_at,
             "tags": tags,
@@ -101,10 +102,10 @@ class Event:
             print(f"Error verifying signature for event {event_id}: {e}")
             return False
 
-    async def send_event(self, public_key, private_key_hex, content, kind, tags):
+    async def send_event(self, private_key_hex, content, kind, tags):
         try:
             event_data = self.create_event(
-                public_key, private_key_hex, content, kind, tags
+                private_key_hex, content, kind, tags
             )
             for ws_relay in self.relays:
                 async with websockets.connect(ws_relay) as ws:
