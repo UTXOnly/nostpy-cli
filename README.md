@@ -72,7 +72,7 @@ nostpy-cli query --kinds "[1,9735]" --relay "wss://yourrelayurl.com"
 #### Example
 * Query an event with search
 ```
-nostpy-cli query -kinds "[31990,1]" -search "random_search" -since 1713629501 -authors npub1g5pm4gf8hh7skp2rsnw9h2pvkr32sdnuhkcx9yte7qxmrg6v4txqqudjqv --relay wss://relay.nostpy.lol
+nostpy-cli query -kinds "[31990,1]" -search "random_search" -since 1713629501 -authors aef0d6b212827f3ba1de6189613e6d4824f181f567b1205273c16895fdaf0b23 --relay wss://relay.nostpy.lol
 ```
 
 ### Decrypt kind4 message content

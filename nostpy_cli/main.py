@@ -60,7 +60,7 @@ def main():
         "-until", "--until", type=int, help="Collect events until"
     )
     query_parser.add_argument(
-        "-authors", "--authors", type=str, help="List of authors e.g. []"
+        "-authors", "--authors", nargs="+", type=str, help="List of authors e.g. []"
     )
     query_parser.add_argument(
         "-limit",
