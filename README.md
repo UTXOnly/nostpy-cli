@@ -13,14 +13,14 @@
 
 Before installing `nostpy-cli`, ensure you have Python 3.6 or higher installed on your system. You can check your Python version by running:
 
-```
+```python
 python3 --version
 ```
 ## Installation
 
 ### Install Using pip
 To install using `pip` use the command below:
-```
+```python
 pip install nostpy-cli
 ```
 
@@ -28,7 +28,7 @@ pip install nostpy-cli
 Clone the Repository
 First, clone the repository to your local machine:
 
-```
+```python
 git clone https://github.com/UTXOnly/nostpy-cli.git
 cd nostpy-cli
 python3 -m build
@@ -43,7 +43,7 @@ Once installed, you can run `nostpy-cli` from the command line as shown below:
 ### Send Event
 To send an event:
 
-```
+```python
 nostpy-cli send_event -privkey "your_private_key_hex" -content "your plaintext message" -tags "[['tag1', 'value1']]" -kind 4 --relay "wss://yourrelayurl.com" "wss://yoursecondrelayurl.com"
 ```
 `--priv_key` and `--relay` arguments are required, all else are optional
@@ -51,27 +51,27 @@ nostpy-cli send_event -privkey "your_private_key_hex" -content "your plaintext m
 #### Example
 * Send a kind 1 event with tags
 
-```
+```python
 nostpy-cli send_event -pubkey 5ce5b352f1ef76b1dffc5694dd5b34126137184cc9a7d78cba841c0635e17952 -privkey 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -content test27 -tags "[
 ['t', 'vvfdvfd'], ['v', 'v2']]" -kind 1 --relay wss://relay.nostpy.lol wss://relay.damus.io wss://nos.lol
 ```
 
 * Send a kind 4 direct message
-```
+```python
 nostpy-cli send_event -privkey 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -content "This is my plaintext message" -tags "[['p', '4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc']]" -kind 4 --relay wss://relay.nostpy.lol wss://relay.damus.io wss://nos.lol
 ```
 
 ### Query Event
 To query events:
 
-```
+```python
 nostpy-cli query --kinds "[1,9735]" --relay "wss://yourrelayurl.com"
 ```
 `--relay` field required
 
 #### Example
 * Query an event with search
-```
+```python
 nostpy-cli query -kinds "[31990,1]" -search "random_search" -since 1713629501 -authors aef0d6b212827f3ba1de6189613e6d4824f181f567b1205273c16895fdaf0b23 --relay wss://relay.nostpy.lol
 ```
 
@@ -79,17 +79,17 @@ nostpy-cli query -kinds "[31990,1]" -search "random_search" -since 1713629501 -a
 Decrypt kind4 message content by providing recipient private key hex, sender public key hex and the message ciphertext, returns the plaintext message
 
 #### Example 
-```
+```python
 nostpy-cli decrypt -content "kP9dCG/stpEGNTjW2/aySQ==?iv=+GCHVOBAiM9X074n1vxiFg==" -priv_key 2b1e4e1f26517dda57458596760bb3bd3bd3717083763166e12983a6421abc18 -sender_pubkey 4503baa127bdfd0b054384dc5ba82cb0e2a8367cbdb0629179f00db1a34caacc 
 ```
 ### Help
 To view all available commands and their options, use the help command:
 
-```
+```python
 nostpy-cli -h
 ```
 
-```
+```python
 usage: nostpy-cli [-h] {query,send_event,decode} ...
 
 Send and query nostr events
